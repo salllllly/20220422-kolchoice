@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <title>Home｜網紅選品｜KoLchoice 台灣</title>
+    <link href="https://kolchoice.com/assets/www/css/event.end.bundle.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+    <div id="eventEnd" class="mainWrapper" role="main" data-page="event-end">
+
+        <section class="eventView view">
+            <div class="contentCon container-fluid">
+                <div class="cover">
+                    <img src="https://kolchoice.com/assets/www/image/bg-eventend.jpg" alt="" class="img-fit-cover">
+                </div>
+                <div class="info">
+                    <div class="inner d-flex">
+                        <div class="split-item">
+                            <div class="logo ratio-16-9">
+                                <div class="ratio-mask">
+                                    <img src="https://kolchoice.com/assets/www/image/soocker-logo.svg" alt=""
+                                        class="img-fit-contain">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="split-item">
+                            <h4 class="title">KOLchoice 網紅選品</h4>
+                            <h3 class="message">消費者訂單查詢</h3>
+                            <div class="search-bar active">
+                                <form action="https://kolchoice.com/shopping/search.html" method="post" id="frm_search">
+                                    <div class="search-group form-group">
+                                        <label for="searchEvent" class="sr-only">Search</label>
+                                        <input type="text" class="form-control" name="code" id="searchEvent"
+                                            placeholder="訂單查詢">
+                                        <button class="search-btn">
+                                            <img src="https://kolchoice.com/assets/www/image/icon/search.svg" alt=""
+                                                class="svg-icon"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://kolchoice.com/assets/www/image/icon/gift.svg" alt="" class="bg-icon svg-icon">
+                    <img src="https://kolchoice.com/assets/www/image/icon/powered-by.svg" alt="" class="powered-by">
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <div class="cartDetailView alertView popup-view bg-bk-alpha">
+        <div class="btnCon d-flex justify-content-end">
+            <button class="closeBtn btn-default btn-only-icon">
+                <img src="https://kolchoice.com/assets/www/image/icon/close.svg" alt="" class="svg-icon">
+            </button>
+        </div>
+        <div class="contentCon" id="productDetailView">
+
+        </div>
+    </div>
+
+    <!-- Preload-->
+    <div class="loadingView"></div><!-- Preload @END -->
+
+
+    <script type="text/javascript" src="https://kolchoice.com/assets/www/js/vendors.bundle.js"></script>
+    <script type="text/javascript" src="https://kolchoice.com/assets/www/js/app.bundle.js"></script>
+
+    <script>
+        $(function () {
+            $('#frm_search').on('submit', function (e) {
+                e.preventDefault();
+
+                if ($("input[name=code]").val() == '') {
+                    return false;
+                }
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: "post",
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        console.log('feedback')
+                        $('#productDetailView').html(data);
+
+                        $('.cartDetailView').show().find('.returnBtn').on('click', function () {
+                            if ($('.cartDetailView').is(":visible")) {
+                                $('body').css("overflow-y", "hidden")
+                            } else {
+                                $('body').css("overflow-y", "initial")
+                            }
+                            let code = $(this).attr('rel');
+                            if (confirm('確定申請退貨作業?')) {
+                                $.ajax({
+                                    url: "https://kolchoice.com/shopping/order_cancel.html",
+                                    type: "post",
+                                    data: 'code=' + code,
+                                    success: function (data) {
+                                        alert(data.msg);
+                                    }
+                                });
+                            }
+
+                        });
+
+
+                    }
+                });
+            });
+
+        });
+    </script>
+
+</html>
